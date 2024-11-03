@@ -9,9 +9,14 @@ class ChessGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("Chess Game")
+        self.root.configure(bg="#f7c3be")
+        self.root.geometry("640x540+100+100")
         self.board = chess.Board()
-        self.selected_square = None  # Initialize the selected_square attribute
-        self.history = []  # Track history for undo functionality
+        self.selected_square = None# Initialize the selected_square attribute
+        self.history = []  # Initialize move history
+        self.current_turn = chess.WHITE  # Track the current turn
+        self.white_score = 0  # Track White's score
+        self.black_score = 0  # Track Black's score
         self.create_widgets()
         self.update_board()
 
@@ -22,12 +27,54 @@ class ChessGUI:
         self.images = {}
         self.load_images()
 
-        # Buttons
-        self.new_game_button = tk.Button(self.root, text="New Game", command=self.new_game)
-        self.new_game_button.grid(row=0, column=1)
+         # Set a common width for both buttons
+        button_width = 10
 
-        self.undo_button = tk.Button(self.root, text="Undo", command=self.undo_move)
-        self.undo_button.grid(row=1, column=1)
+        # New Game Button
+        self.new_game_button = tk.Button(self.root,bg="brown",fg="white", text="New Game", command=self.new_game, width=button_width)
+        self.new_game_button.grid(row=0, column=1, sticky="n", padx=(10,50), pady=(250, 2))  # Reduce gap with smaller pady
+
+        # Undo Button
+        self.undo_button = tk.Button(self.root,bg="brown",fg="white", text="Undo", command=self.undo_move, width=button_width)
+        self.undo_button.grid(row=0, column=1, sticky="n", padx=(10,50), pady=(350, 2))  # Reduce gap with smaller pady
+
+         # Turn Indicator Label
+        self.turn_label = tk.Label(self.root, bg= "#f7c3be", text="Current Turn: White", font=("Arial", 14))
+        self.turn_label.grid(row=1, column=0, columnspan=2, pady=(10, 0), padx=(50, 280))
+
+        # Image Labels
+        self.image1_label = tk.Label(self.root, bg= "#f7c3be", image=self.images["image1"])
+        self.image1_label.grid(row=0, column=1, sticky="n", pady=(300, 2), padx=(0,35))  # Position above Undo button
+
+        self.image2_label = tk.Label(self.root, bg= "#f7c3be", image=self.images["image2"])
+        self.image2_label.grid(row=0, column=1, sticky="n", pady=(200, 20),padx=(0,35))  # Position above New Game button
+
+        self.image_main_label = tk.Label(self.root, bg= "#f7c3be", image=self.images["image_main"])
+        self.image_main_label.grid(row=0, column=1, sticky="n", pady=(40, 2),padx=(10,50))  # Center position
+
+        # Scoreboard Labels
+
+        # White Score Label
+        self.white_score_label = tk.Label(self.root, bg= "#f7c3be", text="White Score: 0", font=("Arial", 12))
+        self.white_score_label.grid(row=0, column=1, sticky="n", padx=(10, 50), pady=(400, 2))
+
+        # Black Score Label
+        self.black_score_label = tk.Label(self.root, bg= "#f7c3be", text="Black Score: 0", font=("Arial", 12))
+        self.black_score_label.grid(row=0, column=1, sticky="n", padx=(10, 50), pady=(430, 2))
+
+    def update_score(self, captured_piece):
+        
+        # Piece values for scoring
+        piece_values = {'p': 1, 'n': 3, 'b': 3, 'r': 5, 'q': 9}
+        piece_type = captured_piece.symbol().lower()
+        score = piece_values.get(piece_type, 0)
+
+        if captured_piece.color == chess.WHITE:
+            self.black_score += score
+            self.black_score_label.config(text=f"Black Score: {self.black_score}")
+        else:
+            self.white_score += score
+            self.white_score_label.config(text=f"White Score: {self.white_score}")
 
     def load_images(self):
         pieces = ['wp', 'wr', 'wn', 'wb', 'wq', 'wk',
@@ -39,6 +86,18 @@ class ChessGUI:
                 self.images[piece] = ImageTk.PhotoImage(image)
             except Exception as e:
                 print(f"Error loading image {piece}.png: {e}")
+             # Load custom images for button positions and center display
+        try:
+            image1 = Image.open("Assets/images/Undo.png").resize((30, 30), Image.Resampling.LANCZOS)
+            self.images["image1"] = ImageTk.PhotoImage(image1)
+
+            image2 = Image.open("Assets/images/New Game.png").resize((60, 40), Image.Resampling.LANCZOS)
+            self.images["image2"] = ImageTk.PhotoImage(image2)
+
+            image_main = Image.open("Assets/images/Logo.png").resize((150, 150), Image.Resampling.LANCZOS)
+            self.images["image_main"] = ImageTk.PhotoImage(image_main)
+        except Exception as e:
+            print(f"Error loading custom images: {e}")
 
     def update_board(self):
         self.canvas.delete("all")  # Clear previous drawings
