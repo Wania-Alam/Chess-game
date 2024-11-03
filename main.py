@@ -1,5 +1,5 @@
 import tkinter as tk
-from PIL import Image, ImageTk ,ImageFont , ImageDraw
+from PIL import Image, ImageTk 
 from Chess_game_1_player import ChessGUI  as ChessGUI1P
 from Chess_game_2_players import ChessGUI as ChessGUI2P
 import os
