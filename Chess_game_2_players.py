@@ -60,6 +60,9 @@ class ChessGUI:
         # Black Score Label
         self.black_score_label = tk.Label(self.root, bg= "#DEB887", text="Black Score: 0", font=("Arial", 12))
         self.black_score_label.grid(row=1, column=1, sticky="n", padx=(10, 50), pady=(30, 2))
+
+        self.return_button = tk.Button(self.root, bg="#D2691E", fg="white", text="Return", command=self.return_to_main, width=button_width)
+        self.return_button.grid(row=1, column=1, sticky="n", padx=(10, 50), pady=(60, 2))  # Position it below the Undo button
         
         # Scoreboard Functions 
     def update_score(self, captured_piece):
@@ -232,7 +235,16 @@ class ChessGUI:
             self.update_board()  # Update the GUI
         else:
             messagebox.showinfo("Undo", "No moves to undo!")
-       
+
+    def return_to_main(self):
+        from main import MainScreen  # Local import
+        self.clear_screen()
+        MainScreen(self.root)
+
+    def clear_screen(self):
+        # Clears the main screen widgets before loading the game screen
+        for widget in self.root.winfo_children():
+            widget.destroy()
 
 if __name__ == "__main__":
     root = tk.Tk()
