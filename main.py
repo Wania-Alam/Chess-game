@@ -33,15 +33,15 @@ class MainScreen:
     
     def create_widgets(self):
         # Add title text on the canvas
-        self.background_canvas.create_text(150, 50, text="Chess", font=("Helvetica",50), fill="white")
-        self.background_canvas.create_text(170, 110, text="Choose Game Mode:", font=("Helvetica", 18), fill="white")
+        self.background_canvas.create_text(190, 50, text="Checkmate", font=("Helvetica",50), fill="white")
+        self.background_canvas.create_text(140, 100, text="Choose Game Mode:", font=("Helvetica", 18), fill="white")
 
         #Button for 1 Player mode
-        one_player_button = tk.Button(self.root, text="1 Player", font=("Helvetica", 16), bg="gray", command=self.start_one_player)
+        one_player_button = tk.Button(self.root, text="1 Player", font=("Helvetica", 16),width=10, bg="gray", command=self.start_one_player)
         self.background_canvas.create_window(100, 170, window=one_player_button)
 
         #Button for 2 Players mode
-        two_player_button = tk.Button(self.root, text="2 Players", font=("Helvetica", 16),bg="gray", command=self.start_two_player)
+        two_player_button = tk.Button(self.root, text="2 Players", font=("Helvetica", 16),width=10 , bg="gray", command=self.start_two_player)
         self.background_canvas.create_window(100, 230, window=two_player_button)
 
     def start_one_player(self):
