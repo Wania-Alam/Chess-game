@@ -1,7 +1,6 @@
 Objective: The goal of the game is to put the opponent's king in checkmate, where it is in a position to be captured and cannot escape.
 
 ![image](https://github.com/user-attachments/assets/fba93e90-ab74-4456-a3c9-d8036d684a10)
-![image](https://github.com/user-attachments/assets/cf2d75db-86bf-49d8-a8fb-3b79332ccd22)
 
 Game Setup:
 
